@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Showcase — Curated Image Gallery</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Sticky Glassmorphic Navigation -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-xl bg-white/75 dark:bg-slate-950/75 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
+                    <i data-lucide="aperture" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <span class="font-display font-bold text-lg tracking-tight block leading-none">Lumina<span class="text-brand-500">.</span></span>
+                    <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Curated Collection</span>
+                </div>
+            </div>
+
+            <!-- Controls: View Switcher & Theme Toggle -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- View Mode Switcher -->
+                <div class="flex items-center bg-slate-200/70 dark:bg-slate-900 p-1 rounded-xl border border-slate-300/50 dark:border-slate-800" role="group" aria-label="Gallery View Mode">
+                    <button id="btn-masonry" onclick="setViewMode('masonry')" class="view-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm" title="Masonry View">
+                        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Masonry</span>
+                    </button>
+                    <button id="btn-grid" onclick="setViewMode('grid')" class="view-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white" title="Uniform Grid View">
+                        <i data-lucide="grid" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Grid</span>
+                    </button>
+                    <button id="btn-carousel" onclick="setViewMode('carousel')" class="view-btn flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white" title="Carousel View">
+                        <i data-lucide="gallery-horizontal" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Slideshow</span>
+                    </button>
+                </div>
+
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" onclick="toggleTheme()" class="p-2.5 rounded-xl bg-slate-200/70 dark:bg-slate-900 border border-slate-300/50 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300/70 dark:hover:bg-slate-800 transition-all" aria-label="Toggle Dark Mode">
+                    <i id="theme-icon-sun" data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
+                    <i id="theme-icon-moon" data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-700"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden pt-10 pb-8 sm:pt-14 sm:pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <!-- Decorative Background Glow -->
+        <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-brand-500/15 dark:bg-brand-500/10 blur-[100px] rounded-full pointer-events-none"></div>
+        
+        <div class="relative text-center max-w-2xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-600 dark:text-brand-400 text-xs font-semibold mb-4">
+                <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                <span>10 Exclusive Visuals</span>
+            </div>
+            <h1 class="font-display text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-3">
+                Visual Moments & <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-indigo-500">Gallery Showcase</span>
+            </h1>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+                Explore your curated image collection in high clarity. Click on any frame to inspect in fullscreen, zoom in, or launch an automated slideshow.
+            </p>
+        </div>
+
+        <!-- Quick Action Bar -->
+        <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <button onclick="openLightbox(0, true)" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs sm:text-sm font-semibold shadow-lg shadow-brand-500/25 transition-all active:scale-95">
+                <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+                <span>Start Auto Slideshow</span>
+            </button>
+            <button onclick="copyAllLinks()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm font-medium transition-all active:scale-95">
+                <i data-lucide="copy" class="w-4 h-4"></i>
+                <span>Copy All Links</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Main Gallery Container -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 w-full">
+        
+        <!-- 1. Masonry & Grid Container -->
+        <div id="gallery-grid" class="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5 transition-all duration-300">
+            <!-- Cards injected via JavaScript -->
+        </div>
+
+        <!-- 2. Inline Slideshow / Carousel View (Hidden by default) -->
+        <div id="carousel-view" class="hidden max-w-4xl mx-auto">
+            <div class="relative rounded-3xl overflow-hidden bg-slate-200/60 dark:bg-slate-900/90 border border-slate-300/60 dark:border-slate-800 shadow-2xl">
+                <!-- Main Carousel Stage -->
+                <div class="relative aspect-[4/3] sm:aspect-[16/10] w-full flex items-center justify-center bg-slate-950 overflow-hidden">
+                    <img id="carousel-main-img" src="" alt="Featured Slide" class="max-h-full max-w-full object-contain transition-all duration-500" />
+                    
+                    <!-- Carousel Fallback State -->
+                    <div id="carousel-fallback" class="hidden flex-col items-center justify-center p-6 text-center max-w-md">
+                        <div class="w-14 h-14 rounded-2xl bg-slate-800 flex items-center justify-center text-brand-400 mb-3">
+                            <i data-lucide="external-link" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="text-white font-semibold text-base mb-1">External Host Preview</h3>
+                        <p class="text-slate-400 text-xs mb-4">Direct embedding is restricted by the host server, or the link points to a viewer page.</p>
+                        <a id="carousel-fallback-link" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold transition-all">
+                            <span>Open Original Image</span>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+
+                    <!-- Prev / Next Buttons -->
+                    <button onclick="navigateCarousel(-1)" class="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/50 hover:bg-black/80 backdrop-blur-md text-white flex items-center justify-center border border-white/10 transition-all active:scale-90" aria-label="Previous Image">
+                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                    </button>
+                    <button onclick="navigateCarousel(1)" class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/50 hover:bg-black/80 backdrop-blur-md text-white flex items-center justify-center border border-white/10 transition-all active:scale-90" aria-label="Next Image">
+                        <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                    </button>
+
+                    <!-- Top Counter & Fullscreen Trigger -->
+                    <div class="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
+                        <span id="carousel-counter" class="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-xs font-semibold border border-white/10">1 / 10</span>
+                        <button onclick="openLightbox(currentCarouselIndex)" class="pointer-events-auto p-2 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md text-white border border-white/10 transition-all" title="Fullscreen Lightbox">
+                            <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Carousel Caption & Controls Bar -->
+                <div class="p-4 sm:px-6 sm:py-4 flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+                    <div>
+                        <h3 id="carousel-title" class="font-display font-bold text-base sm:text-lg text-slate-900 dark:text-white">Frame #01</h3>
+                        <p id="carousel-url" class="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[240px] sm:max-w-md">https://yourimageshare.com/ib/...</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <a id="carousel-open-btn" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-semibold transition-all">
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                            <span>Open Link</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thumbnail Strip -->
+            <div id="carousel-thumbnails" class="mt-4 flex items-center gap-2.5 overflow-x-auto pb-2 px-1">
+                <!-- Thumbnails injected via JS -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Fullscreen Interactive Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-50 hidden bg-slate-950/95 backdrop-blur-2xl flex-col justify-between select-none transition-opacity duration-300" role="dialog" aria-modal="true">
+        
+        <!-- Lightbox Top Bar -->
+        <div class="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-white/10 bg-black/30 z-10">
+            <div class="flex items-center gap-3">
+                <span id="lb-counter" class="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold tracking-wide">1 / 10</span>
+                <span id="lb-title" class="text-white/90 font-medium text-sm hidden sm:inline">Showcase Frame #01</span>
+            </div>
+
+            <!-- Lightbox Toolbar -->
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <!-- Autoplay Slideshow Toggle -->
+                <button id="lb-autoplay-btn" onclick="toggleAutoplay()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-all" title="Toggle Autoplay">
+                    <i id="lb-play-icon" data-lucide="play" class="w-4 h-4"></i>
+                    <span id="lb-play-text" class="hidden sm:inline">Autoplay</span>
+                </button>
+
+                <!-- Zoom Out -->
+                <button onclick="adjustZoom(-0.35)" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all" title="Zoom Out (-)">
+                    <i data-lucide="zoom-out" class="w-4 h-4"></i>
+                </button>
+
+                <!-- Zoom Reset -->
+                <button onclick="resetZoom()" class="px-2.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-all" title="Reset Zoom">
+                    <span id="lb-zoom-level">100%</span>
+                </button>
+
+                <!-- Zoom In -->
+                <button onclick="adjustZoom(0.35)" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-all" title="Zoom In (+)">
+                    <i data-lucide="zoom-in" class="w-4 h-4"></i>
+                </button>
+
+                <!-- Direct External Link -->
+                <a id="lb-external-link" href="#" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white transition-all" title="Open Original Source">
+                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                </a>
+
+                <!-- Close Modal -->
+                <button onclick="closeLightbox()" class="p-2 rounded-xl bg-rose-500/20 hover:bg-rose-500 text-rose-200 hover:text-white transition-all ml-1" title="Close (Esc)">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Lightbox Center Stage -->
+        <div id="lb-stage" class="relative flex-grow flex items-center justify-center overflow-hidden p-4 sm:p-8">
+            <!-- Loading Spinner -->
+            <div id="lb-loader" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div class="w-10 h-10 border-4 border-brand-500/30 border-t-brand-500 rounded-full animate-spin"></div>
+            </div>
+
+            <!-- Main Lightbox Image -->
+            <img id="lb-image" src="" alt="Expanded View" class="max-h-full max-w-full object-contain rounded-lg shadow-2xl transition-transform duration-200 ease-out cursor-grab active:cursor-grabbing" />
+
+            <!-- Fallback Card inside Lightbox if Hotlinking Blocked -->
+            <div id="lb-fallback" class="hidden flex-col items-center justify-center text-center max-w-md p-8 rounded-3xl bg-slate-900/90 border border-white/10 shadow-2xl">
+                <div class="w-16 h-16 rounded-2xl bg-brand-500/20 text-brand-400 flex items-center justify-center mb-4">
+                    <i data-lucide="image-off" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-white font-display font-bold text-lg mb-2">Direct Preview Restricted</h3>
+                <p class="text-slate-400 text-sm mb-6 leading-relaxed">
+                    YourImageShare protects direct hotlinking on some endpoints. Click below to view this image directly in a new tab.
+                </p>
+                <a id="lb-fallback-btn" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-lg shadow-brand-500/25 transition-all">
+                    <span>View Image on Source</span>
+                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <!-- Navigation Arrows -->
+            <button onclick="navigateLightbox(-1)" class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-white/25 backdrop-blur-md text-white flex items-center justify-center border border-white/10 transition-all active:scale-90" aria-label="Previous">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+            <button onclick="navigateLightbox(1)" class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/10 hover:bg-white/25 backdrop-blur-md text-white flex items-center justify-center border border-white/10 transition-all active:scale-90" aria-label="Next">
+                <i data-lucide="chevron-right" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Lightbox Footer Info -->
+        <div class="px-4 sm:px-6 py-3 border-t border-white/10 bg-black/40 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
+            <div class="flex items-center gap-2 truncate">
+                <i data-lucide="link" class="w-3.5 h-3.5 text-brand-400 shrink-0"></i>
+                <span id="lb-url-display" class="truncate max-w-[260px] sm:max-w-lg font-mono text-slate-300"></span>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="copySingleLink()" class="hover:text-white flex items-center gap-1 transition-colors">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                    <span>Copy Link</span>
+                </button>
+                <span class="hidden sm:inline text-slate-600">|</span>
+                <span class="hidden sm:inline">Use <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-slate-300">←</kbd> <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-slate-300">→</kbd> keys to navigate</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Banner -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl border border-slate-800 dark:border-slate-200 text-xs sm:text-sm font-medium">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 dark:text-emerald-600"></i>
+            <span id="toast-message">Action completed</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200/80 dark:border-slate-800/80 py-6 px-4 text-center text-xs text-slate-500 dark:text-slate-400">
+        <p>Curated Image Portfolio &bull; Built with Responsive Glassmorphism UI</p>
+    </footer>
+
+    <script>
+        // Exact 10 Image Links Provided by User
+        const rawLinks = [
+            "https://yourimageshare.com/ib/kC7N9WYO8E",
+            "https://yourimageshare.com/ib/I8ylkK5LPR",
+            "https://yourimageshare.com/ib/P6fllEgVuU",
+            "https://yourimageshare.com/ib/gf3GXzIKby",
+            "https://yourimageshare.com/ib/W2ajmnQtLu",
+            "https://yourimageshare.com/ib/4ejHqOVXYC",
+            "https://yourimageshare.com/ib/EnmrT4r5No",
+            "https://yourimageshare.com/ib/DnDBavMER2",
+            "https://yourimageshare.com/ib/uBL7SBO6uR",
+            "https://yourimageshare.com/ib/wjkuPW1Bzq"
+        ];
+
+        // Enrich dataset with candidate image URLs (direct link + common extension fallbacks)
+        const galleryItems = rawLinks.map((url, idx) => {
+            const id = url.split('/').pop();
+            return {
+                index: idx,
+                id: id,
+                title: `Showcase Frame #${String(idx + 1).padStart(2, '0')}`,
+                originalUrl: url,
+                // Attempt original URL first, then common direct image extensions if needed
+                candidates: [
+                    url,
+                    `${url}.jpg`,
+                    `${url}.png`,
+                    `${url}.webp`
+                ],
+                activeSrc: url,
+                failedAll: false
+            };
+        });
+
+        // Application State
+        let currentView = 'masonry'; // 'masonry' | 'grid' | 'carousel'
+        let currentLightboxIndex = 0;
+        let currentCarouselIndex = 0;
+        let zoomScale = 1;
+        let autoplayInterval = null;
+        let toastTimeout = null;
+
+        // Initialize Icons and Render Gallery
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            renderGalleryCards();
+            renderCarouselThumbnails();
+            updateCarousel(0);
+        });
+
+        /**
+         * Intelligent Image Loader with Multi-Extension Fallback
+         * Tries raw URL first, then .jpg, .png, .webp before displaying a graceful external link card.
+         */
+        function handleImageError(imgElement, itemIndex, attemptIndex) {
+            const item = galleryItems[itemIndex];
+            const nextAttempt = attemptIndex + 1;
+
+            if (nextAttempt < item.candidates.length) {
+                imgElement.dataset.attempt = nextAttempt;
+                imgElement.src = item.candidates[nextAttempt];
+            } else {
+                // All direct image attempts exhausted; trigger clean fallback card
+                item.failedAll = true;
+                imgElement.classList.add('hidden');
+                const fallbackEl = document.getElementById(`fallback-${itemIndex}`);
+                if (fallbackEl) {
+                    fallbackEl.classList.remove('hidden');
+                    fallbackEl.classList.add('flex');
+                }
+            }
+        }
+
+        function handleImageSuccess(imgElement, itemIndex) {
+            const item = galleryItems[itemIndex];
+            item.activeSrc = imgElement.src;
+            item.failedAll = false;
+            const skeleton = document.getElementById(`skeleton-${itemIndex}`);
+            if (skeleton) skeleton.classList.add('hidden');
+        }
+
+        /**
+         * Render Masonry / Grid Gallery Cards
+         */
+        function renderGalleryCards() {
+            const container = document.getElementById('gallery-grid');
+            container.innerHTML = '';
+
+            galleryItems.forEach((item, idx) => {
+                const card = document.createElement('div');
+                const aspectClass = currentView === 'grid' ? 'aspect-[4/3]' : 'min-h-[220px]';
+                
+                card.className = `group relative break-inside-avoid rounded-2xl overflow-hidden bg-slate-200/70 dark:bg-slate-900 border border-slate-300/60 dark:border-slate-800/90 shadow-sm hover:shadow-xl hover:shadow-brand-500/10 transition-all duration-300 cursor-pointer ${aspectClass}`;
+                card.onclick = () => openLightbox(idx);
+
+                card.innerHTML = `
+                    <!-- Loading Shimmer -->
+                    <div id="skeleton-${idx}" class="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
+
+                    <!-- Primary Image -->
+                    <img 
+                        src="${item.candidates[0]}" 
+                        alt="${item.title}"
+                        data-attempt="0"
+                        loading="lazy"
+                        onload="handleImageSuccess(this, ${idx})"
+                        onerror="handleImageError(this, ${idx}, parseInt(this.dataset.attempt || 0))"
+                        class="w-full ${currentView === 'grid' ? 'h-full object-cover' : 'h-auto object-cover'} transform group-hover:scale-105 transition-transform duration-500 ease-out"
+                    />
+
+                    <!-- Graceful Fallback Card if Direct Embedding Blocked -->
+                    <div id="fallback-${idx}" class="hidden flex-col items-center justify-center p-6 text-center min-h-[240px] h-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-950">
+                        <div class="w-12 h-12 rounded-2xl bg-brand-500/10 text-brand-600 dark:text-brand-400 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <i data-lucide="image" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 mb-1">ID: ${item.id}</span>
+                        <h3 class="font-display font-bold text-sm text-slate-900 dark:text-white mb-1">${item.title}</h3>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4 max-w-[200px]">Click to inspect or open directly on YourImageShare</p>
+                        <a href="${item.originalUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold shadow-sm transition-all">
+                            <span>Open Image</span>
+                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </div>
+
+                    <!-- Hover Glass Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-4">
+                        <div class="flex justify-between items-center">
+                            <span class="px-2.5 py-1 rounded-lg bg-black/50 backdrop-blur-md text-white text-[11px] font-semibold border border-white/10">
+                                #${String(idx + 1).padStart(2, '0')}
+                            </span>
+                            <div class="flex items-center gap-1.5">
+                                <a href="${item.originalUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="p-2 rounded-lg bg-black/50 hover:bg-brand-600 backdrop-blur-md text-white border border-white/10 transition-colors" title="Open Original Link">
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                </a>
+                                <span class="p-2 rounded-lg bg-black/50 backdrop-blur-md text-white border border-white/10">
+                                    <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-display font-bold text-white text-sm sm:text-base leading-tight">${item.title}</h3>
+                            <p class="text-white/70 text-[11px] truncate font-mono mt-0.5">${item.originalUrl}</p>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        /**
+         * View Mode Switcher (Masonry, Grid, Carousel)
+         */
+        function setViewMode(mode) {
+            currentView = mode;
+            const gridContainer = document.getElementById('gallery-grid');
+            const carouselContainer = document.getElementById('carousel-view');
+
+            // Update active button styles
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'dark:bg-slate-800', 'text-slate-900', 'dark:text-white', 'shadow-sm');
+                btn.classList.add('text-slate-600', 'dark:text-slate-400');
+            });
+            const activeBtn = document.getElementById(`btn-${mode}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-900', 'dark:text-white', 'shadow-sm');
+                activeBtn.classList.remove('text-slate-600', 'dark:text-slate-400');
+            }
+
+            if (mode === 'carousel') {
+                gridContainer.classList.add('hidden');
+                carouselContainer.classList.remove('hidden');
+                updateCarousel(currentCarouselIndex);
+            } else {
+                carouselContainer.classList.add('hidden');
+                gridContainer.classList.remove('hidden');
+
+                if (mode === 'masonry') {
+                    gridContainer.className = 'columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5 transition-all duration-300';
+                } else if (mode === 'grid') {
+                    gridContainer.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 transition-all duration-300';
+                }
+                renderGalleryCards();
+            }
+        }
+
+        /**
+         * Carousel / Slideshow View Logic
+         */
+        function renderCarouselThumbnails() {
+            const strip = document.getElementById('carousel-thumbnails');
+            strip.innerHTML = '';
+
+            galleryItems.forEach((item, idx) => {
+                const thumb = document.createElement('button');
+                thumb.id = `thumb-${idx}`;
+                thumb.onclick = () => updateCarousel(idx);
+                thumb.className = 'relative shrink-0 w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden border-2 border-transparent opacity-60 hover:opacity-100 transition-all bg-slate-800 flex items-center justify-center';
+                thumb.innerHTML = `
+                    <img src="${item.activeSrc}" alt="${item.title}" onerror="this.style.display='none'" class="w-full h-full object-cover" />
+                    <span class="absolute bottom-0.5 right-1 text-[10px] font-bold text-white drop-shadow">#${idx + 1}</span>
+                `;
+                strip.appendChild(thumb);
+            });
+        }
+
+        function updateCarousel(index) {
+            currentCarouselIndex = (index + galleryItems.length) % galleryItems.length;
+            const item = galleryItems[currentCarouselIndex];
+
+            const mainImg = document.getElementById('carousel-main-img');
+            const fallback = document.getElementById('carousel-fallback');
+            const fallbackLink = document.getElementById('carousel-fallback-link');
+
+            mainImg.classList.remove('hidden');
+            fallback.classList.add('hidden');
+            fallback.classList.remove('flex');
+
+            mainImg.src = item.activeSrc;
+            mainImg.onerror = () => {
+                mainImg.classList.add('hidden');
+                fallback.classList.remove('hidden');
+                fallback.classList.add('flex');
+                fallbackLink.href = item.originalUrl;
+            };
+
+            document.getElementById('carousel-counter').textContent = `${currentCarouselIndex + 1} / ${galleryItems.length}`;
+            document.getElementById('carousel-title').textContent = item.title;
+            document.getElementById('carousel-url').textContent = item.originalUrl;
+            document.getElementById('carousel-open-btn').href = item.originalUrl;
+
+            // Highlight active thumbnail
+            galleryItems.forEach((_, idx) => {
+                const thumb = document.getElementById(`thumb-${idx}`);
+                if (thumb) {
+                    if (idx === currentCarouselIndex) {
+                        thumb.classList.add('border-brand-500', 'opacity-100', 'scale-105');
+                        thumb.classList.remove('border-transparent', 'opacity-60');
+                        thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    } else {
+                        thumb.classList.remove('border-brand-500', 'opacity-100', 'scale-105');
+                        thumb.classList.add('border-transparent', 'opacity-60');
+                    }
+                }
+            });
+        }
+
+        function navigateCarousel(step) {
+            updateCarousel(currentCarouselIndex + step);
+        }
+
+        /**
+         * Interactive Lightbox Modal Logic
+         */
+        function openLightbox(index, startAuto = false) {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+
+            loadLightboxImage(index);
+
+            if (startAuto && !autoplayInterval) {
+                toggleAutoplay();
+            }
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.add('hidden');
+            lightbox.classList.remove('flex');
+            document.body.style.overflow = '';
+
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+                autoplayInterval = null;
+                updateAutoplayUI(false);
+            }
+            resetZoom();
+        }
+
+        function loadLightboxImage(index) {
+            currentLightboxIndex = (index + galleryItems.length) % galleryItems.length;
+            const item = galleryItems[currentLightboxIndex];
+            resetZoom();
+
+            const lbImg = document.getElementById('lb-image');
+            const lbLoader = document.getElementById('lb-loader');
+            const lbFallback = document.getElementById('lb-fallback');
+
+            lbImg.classList.remove('hidden');
+            lbFallback.classList.add('hidden');
+            lbFallback.classList.remove('flex');
+            lbLoader.classList.remove('hidden');
+
+            document.getElementById('lb-counter').textContent = `${currentLightboxIndex + 1} / ${galleryItems.length}`;
+            document.getElementById('lb-title').textContent = item.title;
+            document.getElementById('lb-url-display').textContent = item.originalUrl;
+            document.getElementById('lb-external-link').href = item.originalUrl;
+            document.getElementById('lb-fallback-btn').href = item.originalUrl;
+
+            let attempt = 0;
+            lbImg.src = item.activeSrc;
+
+            lbImg.onload = () => {
+                lbLoader.classList.add('hidden');
+            };
+
+            lbImg.onerror = () => {
+                attempt++;
+                if (attempt < item.candidates.length) {
+                    lbImg.src = item.candidates[attempt];
+                } else {
+                    lbLoader.classList.add('hidden');
+                    lbImg.classList.add('hidden');
+                    lbFallback.classList.remove('hidden');
+                    lbFallback.classList.add('flex');
+                }
+            };
+        }
+
+        function navigateLightbox(step) {
+            loadLightboxImage(currentLightboxIndex + step);
+        }
+
+        /**
+         * Zoom Controls inside Lightbox
+         */
+        function adjustZoom(delta) {
+            zoomScale = Math.min(Math.max(0.5, zoomScale + delta), 3);
+            applyZoom();
+        }
+
+        function resetZoom() {
+            zoomScale = 1;
+            applyZoom();
+        }
+
+        function applyZoom() {
+            const lbImg = document.getElementById('lb-image');
+            lbImg.style.transform = `scale(${zoomScale})`;
+            document.getElementById('lb-zoom-level').textContent = `${Math.round(zoomScale * 100)}%`;
+        }
+
+        /**
+         * Autoplay Slideshow Toggle
+         */
+        function toggleAutoplay() {
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+                autoplayInterval = null;
+                updateAutoplayUI(false);
+                showToast('Slideshow paused');
+            } else {
+                updateAutoplayUI(true);
+                showToast('Autoplay started (3.5s interval)');
+                autoplayInterval = setInterval(() => {
+                    navigateLightbox(1);
+                }, 3500);
+            }
+        }
+
+        function updateAutoplayUI(isPlaying) {
+            const btn = document.getElementById('lb-autoplay-btn');
+            const text = document.getElementById('lb-play-text');
+            if (isPlaying) {
+                btn.classList.add('bg-brand-600', 'hover:bg-brand-500');
+                btn.classList.remove('bg-white/10');
+                text.textContent = 'Pause';
+            } else {
+                btn.classList.remove('bg-brand-600', 'hover:bg-brand-500');
+                btn.classList.add('bg-white/10');
+                text.textContent = 'Autoplay';
+            }
+        }
+
+        /**
+         * Dark / Light Theme Toggle
+         */
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            showToast(isDark ? 'Dark mode enabled' : 'Light mode enabled');
+        }
+
+        /**
+         * Clipboard Helpers (using document.execCommand for iframe compatibility)
+         */
+        function copyToClipboard(text, successMsg) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast(successMsg);
+            } catch (err) {
+                showToast('Unable to copy link');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function copyAllLinks() {
+            copyToClipboard(rawLinks.join('\n'), 'All 10 image links copied!');
+        }
+
+        function copySingleLink() {
+            const url = galleryItems[currentLightboxIndex].originalUrl;
+            copyToClipboard(url, 'Image link copied to clipboard!');
+        }
+
+        /**
+         * Toast Feedback Notification
+         */
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            msgEl.textContent = message;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 2600);
+        }
+
+        /**
+         * Keyboard Navigation & Touch Swipe Support
+         */
+        document.addEventListener('keydown', (e) => {
+            const lightbox = document.getElementById('lightbox');
+            const isLightboxOpen = !lightbox.classList.contains('hidden');
+
+            if (isLightboxOpen) {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowRight') navigateLightbox(1);
+                if (e.key === 'ArrowLeft') navigateLightbox(-1);
+                if (e.key === '+' || e.key === '=') adjustZoom(0.35);
+                if (e.key === '-') adjustZoom(-0.35);
+            } else if (currentView === 'carousel') {
+                if (e.key === 'ArrowRight') navigateCarousel(1);
+                if (e.key === 'ArrowLeft') navigateCarousel(-1);
+            }
+        });
+
+        // Touch Swipe Support on Lightbox Stage
+        let touchStartX = 0;
+        const lbStage = document.getElementById('lb-stage');
+        lbStage.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        lbStage.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                navigateLightbox(diff > 0 ? 1 : -1);
+            }
+        }, { passive: true });
+    </script>
+</body>
+</html>
